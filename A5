@@ -1,0 +1,65 @@
+# Assignment 5
+## IGNJATOVIC David 3AHIF
+### <u>*Basics of Interprocess Communication*</u>
+
+# 1. Race Condition
+## What is a race condition?
+##### - There are two processes and there are "racing". That means that the first one loses because the secound one is overwriting the first one.
+
+# 2. Disabling Interrupts
+
+## Why is it impossible to achieve Mutual Exclusion via disabling interrupts on a multi-core machine?
+##### - Because other processes cann still run even if one is running. There is no core interrupted.+
+
+# Why is it dangerous to give user processes the power to disable interrupts?
+##### - There is the possibility of an endless loop. You can only solve this problem by turning of the power.
+
+# 3. Peterson's Solution
+
+# i) The 2 scenarios
+## Scenario 1
+### 1. Both processes are in enter_region. First proces is 0 and secound is 1.
+### 2. The boolean array on [0] and [1] is now on true
+### 3. the loser is now proces 0. That means that proces 1 is now in the while
+### 4. In leave_region the arry on [1] is now set to false. That means its out of the region and proces 0 can now start.
+# Scenario 2
+### 1. Both proceses are true
+### 2. Proces 0 is set to loser and right after that proces 1 also
+### 3. That means proces 0 enters the critical region and proces 1 is stuck in the while
+### 4. Proces 0 is now on false and proces 1 can now start
+
+# ii) Strict alternation
+
+## Scenario
+
+### Proces 0 always needs to wait 8 parts of the code then proces 1 can start.
+
+# iii) What is the meaning of the variable **loser** in Peterson's solution? When does it have any effect?
+
+### The variable **loser** is the the proces that is in the while and need to wait untiil the other proces is done.
+
+# iv) Soulution for 3 processes.
+````
+int loser
+Bool interested[3]
+
+void enter_region(int process) {
+  int other1;
+  int other2
+  if(process==0){           //gets ther proces (p1 and p2 because process is 0)
+    other1=1;
+    other2=2;
+  }
+  else if(process==1){     //gets ther proces (p0 and p2 because process is 1)
+    other1=0;
+    other2=2;
+  }
+  else if(process == 2){    //gets ther proces (p1 and p0 because process is 2)
+    other1=1;
+    other2=0;
+  }
+
+  interested[process] = True;
+  loser = process;
+  while (loser == process && (interested[other1] || interested[other2])) ;
+````
